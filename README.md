@@ -1,16 +1,24 @@
-# React + Vite
+# SCTEC - Gestão de Empreendimentos SC
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto desenvolvido em React para o cadastro e gestão de empreendimentos. A aplicação é uma Single Page Application (SPA) que conta com um CRUD completo e salva os dados direto no navegador do usuário.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* **React + Vite:** Para construir a interface de forma rápida e dividida em componentes.
+* **Tailwind CSS:** Para a estilização da página. Permitiu criar um visual limpo e responsivo direto nas classes do HTML, sem precisar de arquivos CSS separados.
+* **JavaScript:** Usando recursos essenciais como `.map()` e `.filter()` para manipular a lista de cadastros.
 
-## React Compiler
+## Decisões Técnicas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Formulários Controlados:** O formulário foi construído para que o React tenha controle total sobre o que é digitado. Um único estado (`formData`) gerencia os inputs em tempo real, mantendo os dados e a tela sempre sincronizados.
+* **Divisão de Estados (`useState`):** Separei os estados da aplicação em três partes lógicas: a lista de cadastros, os dados atuais do formulário e um estado (`editandoId`) apenas para controlar se o usuário está criando um item novo ou editando um existente.
+* **Gerador de IDs:** Para não ter problemas na hora de editar ou excluir itens, usei o `crypto.randomUUID()` nativo do navegador para criar um ID único para cada empreendimento cadastrado.
+* **Salvar no Navegador (`localStorage` + `useEffect`):** Para evitar que os dados sumam ao recarregar a página (F5), usei o `localStorage`. O `useState` inicial procura os dados salvos ao abrir a tela, e o `useEffect` trabalha em segundo plano salvando a lista atualizada sempre que há alguma mudança.
 
-## Expanding the ESLint configuration
+## Como rodar o projeto localmente
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Faça o clone deste repositório.
+2. Abra a pasta do projeto no terminal.
+3. Rode o comando `npm install` para instalar as dependências.
+4. Rode o comando `npm run dev` para iniciar o servidor.
+5. Abra o link gerado no seu navegador (normalmente `http://localhost:5173`).
