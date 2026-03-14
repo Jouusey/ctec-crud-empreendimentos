@@ -15,6 +15,8 @@ Projeto desenvolvido em React para o cadastro e gestão de empreendimentos. A ap
 * **Gerador de IDs:** Para não ter problemas na hora de editar ou excluir itens, usei o `crypto.randomUUID()` nativo do navegador para criar um ID único para cada empreendimento cadastrado.
 * **Salvar no Navegador (`localStorage` + `useEffect`):** Para evitar que os dados sumam ao recarregar a página (F5), usei o `localStorage`. O `useState` inicial procura os dados salvos ao abrir a tela, e o `useEffect` trabalha em segundo plano salvando a lista atualizada sempre que há alguma mudança.
 
+* **Vídeo de apresentação** [https://youtu.be/t9FDoa_Jo_Q]
+
 ## Como rodar o projeto localmente
 
 1. Faça o clone deste repositório.
