@@ -87,6 +87,8 @@ function App() {
                 <option value="Tecnologia">Tecnologia</option>
                 <option value="Comércio">Comércio</option>
                 <option value="Indústria">Indústria</option>
+                <option value="Serviços">Serviços</option>
+                <option value="Agronegócio">Agronegócio</option>
               </select>
             </div>
             <div>
