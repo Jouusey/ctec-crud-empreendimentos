@@ -1,27 +1,36 @@
-import { useState } from "react";
-
+import { useState } from 'react';
 
 function App() {
-
+  const [empreendimentos, setEmpreendimentos] = useState([]);
   const [formData, setFormData] = useState({
+    
     nomeEmpreendimento: '',
     responsavel: '',
     municipio: '',
     segmento: 'Tecnologia',
     email: '',
-    status: 'ativo'
+    status: 'Ativo'
 
-
-
-  })
+  });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
 
-    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value });
 
-    setFormData({ ...formData, [name]: value})
-  }
+  };
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); 
+    const novoEmpreendimento = { ...formData, id: crypto.randomUUID() };
+
+    setEmpreendimentos([...empreendimentos, novoEmpreendimento]);
+
+    setFormData({
+      nomeEmpreendimento: '', responsavel: '', municipio: '',
+      segmento: 'Tecnologia', email: '', status: 'Ativo'
+    });
+  };
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen font-sans text-gray-800">
@@ -29,41 +38,78 @@ function App() {
         SCTEC - Gestão de Empreendimentos SC
       </h1>
       
-      <div className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
+
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div className="bg-yellow-50 p-2 text-sm text-yellow-800 mb-4 rounded border border-yellow-200">
-          <p>Memória em tempo real:</p>
-          <p>Nome: <strong>{formData.nomeEmpreendimento}</strong></p>
-          <p>Responsável: <strong>{formData.responsavel}</strong></p>
+
+        <div className="bg-white p-6 rounded shadow-md h-fit">
+          <h2 className="text-xl font-bold mb-4 border-b pb-2">Novo Cadastro</h2>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Nome *</label>
+              <input type="text" name="nomeEmpreendimento" value={formData.nomeEmpreendimento} onChange={handleChange} required className="w-full border rounded p-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Responsável *</label>
+              <input type="text" name="responsavel" value={formData.responsavel} onChange={handleChange} required className="w-full border rounded p-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Município *</label>
+              <input type="text" name="municipio" value={formData.municipio} onChange={handleChange} required className="w-full border rounded p-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Segmento *</label>
+              <select name="segmento" value={formData.segmento} onChange={handleChange} className="w-full border rounded p-2">
+                <option value="Tecnologia">Tecnologia</option>
+                <option value="Comércio">Comércio</option>
+                <option value="Indústria">Indústria</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">E-mail *</label>
+              <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full border rounded p-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Status *</label>
+              <select name="status" value={formData.status} onChange={handleChange} className="w-full border rounded p-2">
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+              </select>
+            </div>
+            <button type="submit" className="mt-4 bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">
+              Cadastrar
+            </button>
+          </form>
         </div>
 
-        <form className="flex flex-col gap-4">
+
+        <div className="bg-white p-6 rounded shadow-md">
+          <h2 className="text-xl font-bold mb-4 border-b pb-2">
+            Empreendimentos Cadastrados ({empreendimentos.length})
+          </h2>
           
-          <div>
-            <label className="block text-sm font-medium mb-1">Nome do Empreendimento *</label>
-            <input 
-              type="text" 
-              name="nomeEmpreendimento" 
-              value={formData.nomeEmpreendimento} 
-              onChange={handleChange} 
-              className="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
-              placeholder="Ex: Tech SC" 
-            />
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Empreendedor(a) Responsável *</label>
-            <input 
-              type="text" 
-              name="responsavel" 
-              value={formData.responsavel} 
-              onChange={handleChange} 
-              className="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none" 
-              placeholder="Ex: Maria Silva" 
-            />
-          </div>
+          {empreendimentos.length === 0 ? (
+            <p className="text-gray-500 text-center mt-10">Nenhum empreendimento cadastrado ainda.</p>
+          ) : (
 
-        </form>
+            <div className="flex flex-col gap-4">
+              {empreendimentos.map((emp) => (
+
+                <div key={emp.id} className="border p-4 rounded-lg bg-gray-50">
+                  <h3 className="font-bold text-lg text-blue-800">{emp.nomeEmpreendimento}</h3>
+                  <p className="text-sm text-gray-600">👤 {emp.responsavel} | 📍 {emp.municipio}</p>
+                  <p className="text-sm text-gray-600">💼 {emp.segmento} | ✉️ {emp.email}</p>
+                  
+                  <span className={`inline-block mt-2 px-2 py-1 text-xs font-semibold rounded-full ${emp.status === 'Ativo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {emp.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );
