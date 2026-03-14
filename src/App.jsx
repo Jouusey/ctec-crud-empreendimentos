@@ -3,7 +3,7 @@ import { useState } from 'react';
 function App() {
   const [empreendimentos, setEmpreendimentos] = useState([]);
   const [formData, setFormData] = useState({
-    
+
     nomeEmpreendimento: '',
     responsavel: '',
     municipio: '',
@@ -31,6 +31,15 @@ function App() {
       segmento: 'Tecnologia', email: '', status: 'Ativo'
     });
   };
+
+    const handleDelete = (id) => {
+    if (window.confirm('Tem certeza que deseja excluir este registro?')) {
+
+      const listaAtualizada = empreendimentos.filter((emp) => emp.id !== id);
+      
+
+      setEmpreendimentos(listaAtualizada);
+    }}
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen font-sans text-gray-800">
@@ -95,15 +104,26 @@ function App() {
 
             <div className="flex flex-col gap-4">
               {empreendimentos.map((emp) => (
-
-                <div key={emp.id} className="border p-4 rounded-lg bg-gray-50">
-                  <h3 className="font-bold text-lg text-blue-800">{emp.nomeEmpreendimento}</h3>
-                  <p className="text-sm text-gray-600">👤 {emp.responsavel} | 📍 {emp.municipio}</p>
-                  <p className="text-sm text-gray-600">💼 {emp.segmento} | ✉️ {emp.email}</p>
+                <div key={emp.id} className="border p-4 rounded-lg bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                   
-                  <span className={`inline-block mt-2 px-2 py-1 text-xs font-semibold rounded-full ${emp.status === 'Ativo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {emp.status}
-                  </span>
+                  <div>
+                    <h3 className="font-bold text-lg text-blue-800">{emp.nomeEmpreendimento}</h3>
+                    <p className="text-sm text-gray-600">👤 {emp.responsavel} | 📍 {emp.municipio}</p>
+                    <p className="text-sm text-gray-600">💼 {emp.segmento} | ✉️ {emp.email}</p>
+                    <span className={`inline-block mt-2 px-2 py-1 text-xs font-semibold rounded-full ${emp.status === 'Ativo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {emp.status}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 sm:mt-0">
+                    <button 
+                      onClick={() => handleDelete(emp.id)} 
+                      className="text-sm bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 font-medium"
+                    >
+                      Excluir
+                    </button>
+                  </div>
+
                 </div>
               ))}
             </div>
