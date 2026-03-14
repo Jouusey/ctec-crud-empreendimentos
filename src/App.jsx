@@ -1,13 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
-  const [empreendimentos, setEmpreendimentos] = useState([]);
+  const [empreendimentos, setEmpreendimentos] = useState(() => {
+    const dadosSalvos = localStorage.getItem('sctec_dados');
+    
+    if (dadosSalvos) {
+      return JSON.parse(dadosSalvos);
+    }
+    return [];
+  });
+
   const [formData, setFormData] = useState({
     nomeEmpreendimento: '', responsavel: '', municipio: '',
     segmento: 'Tecnologia', email: '', status: 'Ativo'
   });
 
   const [editandoId, setEditandoId] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem('sctec_dados', JSON.stringify(empreendimentos));
+  }, [empreendimentos]); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,7 +34,7 @@ function App() {
         emp.id === editandoId ? { ...formData, id: editandoId } : emp
       );
       setEmpreendimentos(listaAtualizada);
-      setEditandoId(null); // Sai do modo de edição
+      setEditandoId(null);
     } else {
       const novoEmpreendimento = { ...formData, id: crypto.randomUUID() };
       setEmpreendimentos([...empreendimentos, novoEmpreendimento]);
@@ -35,8 +47,8 @@ function App() {
   };
 
   const handleEdit = (emp) => {
-    setFormData(emp); 
-    setEditandoId(emp.id); 
+    setFormData(emp);
+    setEditandoId(emp.id);
   };
 
   const handleDelete = (id) => {
@@ -51,7 +63,6 @@ function App() {
       
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         
-       
         <div className="bg-white p-6 rounded shadow-md h-fit">
           <h2 className="text-xl font-bold mb-4 border-b pb-2">
             {editandoId ? 'Editar Empreendimento' : 'Novo Cadastro'}
@@ -96,14 +107,7 @@ function App() {
               </button>
               
               {editandoId && (
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    setEditandoId(null);
-                    setFormData({ nomeEmpreendimento: '', responsavel: '', municipio: '', segmento: 'Tecnologia', email: '', status: 'Ativo' });
-                  }} 
-                  className="flex-1 bg-gray-300 text-gray-800 font-bold py-2 rounded hover:bg-gray-400"
-                >
+                <button type="button" onClick={() => { setEditandoId(null); setFormData({ nomeEmpreendimento: '', responsavel: '', municipio: '', segmento: 'Tecnologia', email: '', status: 'Ativo' }); }} className="flex-1 bg-gray-300 text-gray-800 font-bold py-2 rounded hover:bg-gray-400">
                   Cancelar
                 </button>
               )}
@@ -130,13 +134,8 @@ function App() {
                   </div>
 
                   <div className="mt-4 sm:mt-0 flex gap-2">
-                    
-                    <button onClick={() => handleEdit(emp)} className="text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded hover:bg-yellow-200 font-medium">
-                      Editar
-                    </button>
-                    <button onClick={() => handleDelete(emp.id)} className="text-sm bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 font-medium">
-                      Excluir
-                    </button>
+                    <button onClick={() => handleEdit(emp)} className="text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded hover:bg-yellow-200 font-medium">Editar</button>
+                    <button onClick={() => handleDelete(emp.id)} className="text-sm bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 font-medium">Excluir</button>
                   </div>
                 </div>
               ))}
